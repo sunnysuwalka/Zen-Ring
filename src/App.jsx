@@ -38,9 +38,20 @@ import { FaXTwitter } from "react-icons/fa6";
 
 // ============================================================
 //  NAVBAR
+//  Each button scrolls to its target section by id.
+//    DESIGN      → #section-design      (spec pointers area)
+//    PERFORMANCE → #section-performance (bento features grid)
+//    MATERIALS   → #section-materials   (color variant section)
+//    ORDER       → #section-order       (CTA ring selector)
 // ============================================================
 
 function Navbar() {
+
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div className="py-2 px-4 w-full grid grid-cols-2">
 
@@ -51,10 +62,10 @@ function Navbar() {
 
       {/* Navigation links */}
       <div className="flex justify-end gap-4 text-sectext text-[clamp(1rem,1vw,1rem)] items-center">
-        <button className="font-gmono hover:bg-blue-800 px-2 focus:outline-none">DESIGN</button>
-        <button className="font-gmono hover:bg-blue-800 px-2 focus:outline-none">PERFORMANCE</button>
-        <button className="font-gmono hover:bg-blue-800 px-2 focus:outline-none">MATERIALS</button>
-        <button className="font-gmono hover:bg-blue-800 px-2 focus:outline-none">ORDER</button>
+        <button className="font-gmono hover:bg-blue-800 px-2 focus:outline-none" onClick={() => scrollTo("section-design")}>DESIGN</button>
+        <button className="font-gmono hover:bg-blue-800 px-2 focus:outline-none" onClick={() => scrollTo("section-performance")}>PERFORMANCE</button>
+        <button className="font-gmono hover:bg-blue-800 px-2 focus:outline-none" onClick={() => scrollTo("section-materials")}>MATERIALS</button>
+        <button className="font-gmono hover:bg-blue-800 px-2 focus:outline-none" onClick={() => scrollTo("section-order")}>ORDER</button>
       </div>
 
     </div>
@@ -255,8 +266,9 @@ function HeroSection() {
       </section>
 
       {/* --- Spec callout overlay (draws in at bottom of scroll range) --- */}
+      {/* id="section-design" — DESIGN nav link scrolls here */}
       <div>
-        <div className="relative h-[80vh]">
+        <div id="section-design" className="relative h-[80vh]">
 
           {specPointers.map((pointer) => (
             <SpecPointer
@@ -321,11 +333,13 @@ function RecoveryScoreCard() {
 //    • Bottom layer  — blurred, low-opacity ghost cards
 //                      (creates a frosted depth effect)
 //    • Top layer     — real glass-morphism feature cards
+//
+//  id="section-performance" — PERFORMANCE nav link scrolls here
 // ============================================================
 
 function FeaturesSection() {
   return (
-    <section className="w-[100%] flex flex-col items-center my-10 gap-6">
+    <section id="section-performance" className="w-[100%] flex flex-col items-center my-10 gap-6">
 
       <div className="text-prtext font-geist text-[clamp(2.6rem,2vw,3rem)] mb-10 italic">
         "The List is Endless."
@@ -416,27 +430,8 @@ function FeaturesSection() {
 
 
 // ============================================================
-//  COLOR VARIANT SECTION — updated animation scheme
-//
-//  Black  → exits LEFT with rotation
-//  Silver → enters from BOTTOM with rotation, straightens,
-//           then exits LEFT with rotation
-//  Gold   → enters from BOTTOM with rotation, straightens,
-//           then holds
-//
-//  Rotation direction:
-//    Entry  — tilts from  15° → 0°  (rights itself as it rises)
-//    Exit   — tilts from   0° → -15° (tips away as it leaves)
-//
-//  Visibility fix: Silver and Gold start at y:800 (off-screen)
-//  so they are never visible before their turn.
-//
-//  Scroll timeline:
-//    0.00 – 0.20  Black  visible
-//    0.20 – 0.40  Black  exits left+rotates  / Silver rises in + unrotates
-//    0.40 – 0.60  Silver visible
-//    0.60 – 0.80  Silver exits left+rotates  / Gold rises in + unrotates
-//    0.80 – 1.00  Gold   visible
+//  COLOR VARIANT SECTION
+//  id="section-materials" — MATERIALS nav link scrolls here
 // ============================================================
 
 function ColorVariantSection() {
@@ -497,7 +492,7 @@ function ColorVariantSection() {
   ];
 
   return (
-    <section ref={colorRef} className="h-[300vh] relative">
+    <section id="section-materials" ref={colorRef} className="h-[300vh] relative">
 
       <div className="sticky top-0 h-screen grid grid-cols-2 items-center overflow-hidden">
 
@@ -535,7 +530,6 @@ function ColorVariantSection() {
                   {variant.subtext}
                 </span>
               )}
-
 
               <button className="bg-blue-800 rounded-full text-ctalight p-2 px-3 font-geist border-2 border-ctalight mt-4">
                 RESERVE YOUR AURA
@@ -663,8 +657,7 @@ function CTA() {
   return (
     <>
       {/* SECTION 1 */}
-      <div
-        className="h-[100vh] w-auto mb-16 grid grid-cols-2">
+      <div className="h-[100vh] w-auto mb-16 grid grid-cols-2">
 
         {/* COL 1 */}
         <div className="pl-10 flex justify-center items-center">
@@ -679,9 +672,8 @@ function CTA() {
 
       </div>
 
-      {/* SECTION 2 */}
-
-      <div className="grid grid-cols-1 mb-20">
+      {/* SECTION 2 — id="section-order" — ORDER nav link scrolls here */}
+      <div id="section-order" className="grid grid-cols-1 mb-20">
         <div className="flex flex-col items-center justify-center">
           <img src={selectedRing.src} alt="" className="h-80" />
           <div
@@ -697,33 +689,28 @@ function CTA() {
           <div className="text-prtext font-geist font-bold text-[44px]">Zen Ring</div>
           <div className="font-gmono text-sectext tracking-wider">Master Your Inner Metric.</div>
 
-
-
           <div className="space-x-12 mt-4">
             {ringVariants.map((ring) => (
               <button
                 key={ring.id}
                 onClick={() => setSelectedRing(ring)}
-                className={`text-prtext border px-8 py-2 rounded-full ${   selectedRing.id === ring.id
-            ? "bg-blue-900 text-white border-blue-900" : ""}`}
+                className={`text-prtext border px-8 py-2 rounded-full ${selectedRing.id === ring.id
+                  ? "bg-blue-900 text-white border-blue-900" : ""}`}
               >
                 {ring.color}
               </button>
             ))}
           </div>
 
-
           <div className="flex gap-4 items-center">
             <span className="text-prtext font-geist mt-4 text-[48px]">{selectedRing.price}</span>
 
             <button className="bg-blue-800 rounded-full text-ctalight h-[50px] px-9 font-geist border-2 border-ctalight mt-4">
               Order
-          </button>
-
+            </button>
           </div>
 
-      </div>
-
+        </div>
       </div>
 
     </>
@@ -741,9 +728,6 @@ function Footer(){
         <div className="flex gap-8 text-sectext text-[24px] mt-3">  <FaInstagram/> <FaXTwitter/> <FaFacebookF/></div>
         <div className="flex gap-8 text-sectext text-[15px] font-gmono mt-1">  @ZenRing.Official</div>
     </div>
-
-    
-
   );
 }
 
