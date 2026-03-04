@@ -14,7 +14,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, useMotionValue, animate, useScroll, useTransform, useInView } from "framer-motion";
 
 // ---------- Asset imports ----------
-import RingImg from "./assets/Images/Ring image.png";
+import RingImg from "./assets/Images/Ring Image.png";
 import Shell from "./assets/Images/Ring Shell.png";
 import RingBlack from "./assets/Images/Ring Black.png";
 import RingSilver from "./assets/Images/Ring Silver.png"
